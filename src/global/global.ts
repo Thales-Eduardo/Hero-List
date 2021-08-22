@@ -13,6 +13,15 @@ export default createGlobalStyle`
     -webkit-font-smoothisng: antialiased;
   }
 
+  &::-webkit-scrollbar{
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(transparent, #34c6eb);
+    border-radius: 12px;
+  }
+
   body, input, button, textarea {
     font: 400 16px "Roboto", sans-serif;
   }

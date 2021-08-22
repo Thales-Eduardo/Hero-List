@@ -5,5 +5,6 @@ export default {
     secondary: '#3a3a3a',
     button: '#34c6eb',
     white: '#fff',
+    red: '#c53030',
   },
 };

@@ -1,8 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div``;
+interface Props {
+  erro: boolean;
+}
 
-export const Form = styled.form`
+export const Container = styled.div`
+  width: 100%;
+`;
+
+export const Error = styled.span`
+  display: block;
+  color: ${(props) => props.theme.colors.red};
+  margin-top: 8px;
+`;
+
+export const Form = styled.form<Props>`
   margin-top: 10px;
   max-width: 715px;
   display: flex;
@@ -17,6 +29,17 @@ export const Form = styled.form`
     color: ${(props) => props.theme.colors.secondary};
     border: 2px solid white;
     border-right: 0;
+    transition: filter 0.2ms;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+
+    ${(props) =>
+      props.erro &&
+      css`
+        border-color: ${(props) => props.theme.colors.red};
+      `}
   }
 
   button {
@@ -47,7 +70,6 @@ export const Content = styled.div`
   border-radius: 10px;
   padding: 8px;
   overflow: hidden;
-
   height: 220px;
 
   & + div {
@@ -57,10 +79,11 @@ export const Content = styled.div`
   img {
     width: 150px;
     height: 200px;
+    margin-right: 10px;
     border-radius: 10px;
+
     object-fit: cover;
     object-position: top;
-    margin-right: 10px;
   }
 
   aside {
@@ -71,18 +94,16 @@ export const Content = styled.div`
     h1 {
       display: block;
       font-weight: bold;
+      margin-bottom: 20px;
     }
+
     p {
-      margin: 20px 0px;
+      margin-top: 5px;
+      line-height: 25px;
+
+      strong {
+        font-weight: bold;
+      }
     }
   }
-`;
-
-export const Star = styled.button`
-  border: 0;
-  background: none;
-  height: 40px;
-  width: 40px;
-
-  margin-bottom: 150px;
 `;

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import React, { useState, useEffect, FormEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { api } from '../../services/api';
 
-import { Container, Form, GamesList, Content, Star } from './styles';
+import { Container, Form, GamesList, Content, Error } from './styles';
 
 interface ApiProps {
   id: number;
@@ -14,46 +14,82 @@ interface ApiProps {
   work: {
     occupation: string;
   };
+  biography: {
+    publisher: string;
+  };
 }
 
 export const Home: React.FC = () => {
-  const [data, setData] = useState<ApiProps>({} as ApiProps);
-  const [value, setvalue] = useState(false);
+  const [data, setData] = useState<ApiProps[]>([]);
+  const [input, setInput] = useState('');
+  const [inputError, setInputError] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     async function name() {
       const response = await api.get('/all.json');
-      // response.data.map((itens: any) => console.log(itens));
+      setData(response.data);
     }
     name();
   }, []);
 
+  function handleFindHero(event: FormEvent) {
+    event.preventDefault();
+
+    if (input.trim() === '') {
+      return setInputError('Herói não encontrado.');
+    }
+
+    // eslint-disable-next-line array-callback-return
+    const res = data.find((itens: any) => {
+      if (itens.name === input) {
+        return history.push(`/profile/${itens.id}`);
+      }
+
+      return false;
+    });
+
+    if (!res) {
+      return setInputError('Herói não encontrado.');
+    }
+
+    setInputError('');
+  }
+
   return (
     <Container>
-      <Form>
-        <input type="text" placeholder="Digite o nome do jogo." />
+      {inputError && <Error>{inputError}</Error>}
+      <Form erro={!!inputError} onSubmit={handleFindHero}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          type="text"
+          placeholder="Digite o nome do herói."
+        />
         <button type="submit">Pesquisar</button>
       </Form>
-      {value ?? (
-        <GamesList>
-          <Content>
-            <img src={data.images.sm} alt={data.name} />
+      <GamesList>
+        {data.map((itens) =>
+          itens.id <= 10 ? (
+            <Content key={itens.id}>
+              <img src={itens.images.sm} alt={itens.name} />
 
-            <aside>
-              <h1>{data.name}</h1>
-              <p>{data.work.occupation}</p>
-            </aside>
-
-            <Star type="button">
-              {true ? (
-                <AiFillHeart size={24} color="red" />
-              ) : (
-                <AiOutlineHeart size={24} />
-              )}
-            </Star>
-          </Content>
-        </GamesList>
-      )}
+              <aside>
+                <h1>{itens.name}</h1>
+                <p>
+                  <strong>Ocupação: </strong>
+                  {itens.work.occupation}.
+                </p>
+                <p>
+                  <strong>Editora: </strong> {itens.biography.publisher}.
+                </p>
+              </aside>
+            </Content>
+          ) : (
+            false
+          ),
+        )}
+      </GamesList>
     </Container>
   );
 };

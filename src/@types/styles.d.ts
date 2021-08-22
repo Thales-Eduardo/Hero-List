@@ -7,6 +7,7 @@ declare module 'styled-components' {
       secondary: string;
       button: string;
       white: string;
+      red: string;
     };
   }
 }
