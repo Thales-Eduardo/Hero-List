@@ -16,6 +16,7 @@ interface ApiProps {
   };
   biography: {
     publisher: string;
+    fullName: string;
   };
 }
 
@@ -26,11 +27,11 @@ export const Home: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    async function name() {
+    async function findAllHero() {
       const response = await api.get('/all.json');
       setData(response.data);
     }
-    name();
+    findAllHero();
   }, []);
 
   function handleFindHero(event: FormEvent) {
@@ -40,20 +41,27 @@ export const Home: React.FC = () => {
       return setInputError('Herói não encontrado.');
     }
 
-    // eslint-disable-next-line array-callback-return
-    const res = data.find((itens: any) => {
-      if (itens.name === input) {
+    const response = data.find((itens: ApiProps) => {
+      const value = input[0].toUpperCase() + input.slice(1).trim();
+
+      if (itens.name === value || itens.biography.fullName === value) {
         return history.push(`/profile/${itens.id}`);
       }
 
       return false;
     });
 
-    if (!res) {
+    if (!response) {
       return setInputError('Herói não encontrado.');
     }
 
     setInputError('');
+  }
+
+  function profileHero(id: number) {
+    data.find((itens: ApiProps) =>
+      itens.id === id ? history.push(`/profile/${itens.id}`) : false,
+    );
   }
 
   return (
@@ -71,7 +79,7 @@ export const Home: React.FC = () => {
       <GamesList>
         {data.map((itens) =>
           itens.id <= 10 ? (
-            <Content key={itens.id}>
+            <Content key={itens.id} onClick={() => profileHero(itens.id)}>
               <img src={itens.images.sm} alt={itens.name} />
 
               <aside>

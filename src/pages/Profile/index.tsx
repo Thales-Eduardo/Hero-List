@@ -1,41 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-import { Container, Content, Description } from './styles';
+import { api } from '../../services/api';
+
+import { Container, Content } from './styles';
+
+interface ProfileProps {
+  id: number;
+  name: string;
+  images: {
+    sm: string;
+  };
+  appearance: {
+    gender: string;
+    race: string;
+  };
+  biography: {
+    fullName: string;
+  };
+}
+
+interface ParamesProps {
+  id: string;
+}
 
 export const Profile: React.FC = () => {
+  const [hero, setHero] = useState({} as ProfileProps);
+  const [value, setValue] = useState(false);
+  const params = useParams<ParamesProps>();
+
+  useEffect(() => {
+    api.get(`/id/${params.id}.json`).then((response) => {
+      setHero(response.data);
+      setValue(true);
+    });
+  }, [params.id]);
+
   return (
     <Container>
       <Link to="/">
         <FiArrowLeft size={24} />
       </Link>
 
-      <Content>
-        <img
-          src="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/1-a-bomb.jpg"
-          alt="perfil"
-        />
-        <div>
-          <h1>Thales Eduardo Santos Melo</h1>
-          <p>Gender</p>
-          <p>race</p>
-        </div>
-      </Content>
+      {value ? (
+        <Content>
+          <img src={hero.images.sm} alt={hero.name} />
 
-      <Description>
-        <div>
-          <p>Ocupação: </p>
-          <p>Ocupação: </p>
-          <p>Ocupação: </p>
-        </div>
-
-        <div>
-          <p>Ocupação: </p>
-          <p>Ocupação: </p>
-          <p>Ocupação: </p>
-        </div>
-      </Description>
+          <div>
+            <h1>{hero.biography.fullName}</h1>
+            <p>
+              <strong>Nike: </strong>
+              {hero.name}.
+            </p>
+            <p>
+              <strong>Gender: </strong>
+              {hero.appearance.gender}.
+            </p>
+            <p>
+              <strong>Race: </strong>
+              {hero.appearance.race}.
+            </p>
+          </div>
+        </Content>
+      ) : (
+        <h1>Carregando...</h1>
+      )}
     </Container>
   );
 };

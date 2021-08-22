@@ -1,11 +1,15 @@
 import styled, { css } from 'styled-components';
 
-interface Props {
+interface FormProps {
   erro: boolean;
 }
 
 export const Container = styled.div`
   width: 100%;
+
+  @media (max-width: 400px) {
+    padding: 10px;
+  }
 `;
 
 export const Error = styled.span`
@@ -14,13 +18,13 @@ export const Error = styled.span`
   margin-top: 8px;
 `;
 
-export const Form = styled.form<Props>`
+export const Form = styled.form<FormProps>`
   margin-top: 10px;
   max-width: 715px;
   display: flex;
 
   input {
-    flex: 1;
+    flex: 6;
     height: 60px;
     background: ${(props) => props.theme.colors.white};
     padding: 0 34px;
@@ -43,16 +47,39 @@ export const Form = styled.form<Props>`
   }
 
   button {
-    width: 210px;
+    flex: 2;
     height: 60px;
     color: ${(props) => props.theme.colors.white};
     border: 0;
     background: ${(props) => props.theme.colors.button};
     border-radius: 0px 5px 5px 0px;
     transition: filter 0.2ms;
+    padding: 2px;
 
     &:hover {
       filter: brightness(0.9);
+    }
+  }
+
+  @media (max-width: 400px) {
+    max-width: 0;
+    margin-top: 0px;
+    input {
+      padding: 0 12px;
+    }
+
+    button {
+      padding: 0 12px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    input {
+      padding: 0;
+    }
+
+    button {
+      padding: 0 5px;
     }
   }
 `;
@@ -71,6 +98,12 @@ export const Content = styled.div`
   padding: 8px;
   overflow: hidden;
   height: 220px;
+  cursor: pointer;
+  transition: filter 0.2ms;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 
   & + div {
     margin-top: 15px;
@@ -103,6 +136,30 @@ export const Content = styled.div`
 
       strong {
         font-weight: bold;
+      }
+    }
+  }
+  @media (max-width: 400px) {
+    img {
+      width: 230px;
+      height: 200px;
+      margin-top: 10px;
+
+      object-fit: cover;
+      object-position: center;
+    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 50%;
+    margin-top: -45px;
+
+    aside {
+      padding: 10px 8px 10px 20px;
+
+      h1 {
       }
     }
   }
