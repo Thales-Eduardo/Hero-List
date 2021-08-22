@@ -42,9 +42,14 @@ export const Home: React.FC = () => {
     }
 
     const response = data.find((itens: ApiProps) => {
-      const value = input[0].toUpperCase() + input.slice(1).trim();
+      const value = input.toLowerCase().replace(/(?:^|\s)\S/g, (string) => {
+        return string.toUpperCase();
+      });
 
-      if (itens.name === value || itens.biography.fullName === value) {
+      if (
+        itens.name === value.trim() ||
+        itens.biography.fullName === value.trim()
+      ) {
         return history.push(`/profile/${itens.id}`);
       }
 
