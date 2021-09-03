@@ -1,15 +1,17 @@
 import styled, { css } from 'styled-components';
 
-interface FormProps {
-  erro: boolean;
-}
-
 interface ContentProps {
   isFavorite: boolean;
 }
 
 export const Container = styled.div`
   width: 100%;
+  > h1 {
+    color: ${(props) => props.theme.colors.white};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   a {
     display: flex;
@@ -26,86 +28,11 @@ export const Container = styled.div`
 
   @media (max-width: 400px) {
     padding: 10px;
-    a {
-      margin-bottom: 10px;
-    }
-  }
-`;
-
-export const Error = styled.span`
-  display: block;
-  color: ${(props) => props.theme.colors.red};
-  margin-top: 8px;
-`;
-
-export const Form = styled.form<FormProps>`
-  margin-top: 10px;
-  max-width: 715px;
-  display: flex;
-
-  input {
-    flex: 6;
-    height: 60px;
-    background: ${(props) => props.theme.colors.white};
-    padding: 0 34px;
-    border: 0;
-    border-radius: 5px 0px 0px 5px;
-    color: ${(props) => props.theme.colors.secondary};
-    border: 2px solid white;
-    border-right: 0;
-    transition: filter 0.2ms;
-
-    &:hover {
-      filter: brightness(0.9);
-    }
-
-    ${(props) =>
-      props.erro &&
-      css`
-        border-color: ${(props) => props.theme.colors.red};
-      `}
-  }
-
-  button {
-    flex: 2;
-    height: 60px;
-    color: ${(props) => props.theme.colors.white};
-    border: 0;
-    background: ${(props) => props.theme.colors.button};
-    border-radius: 0px 5px 5px 0px;
-    transition: filter 0.2ms;
-    padding: 2px;
-
-    &:hover {
-      filter: brightness(0.9);
-    }
-  }
-
-  @media (max-width: 400px) {
-    max-width: 0;
-    margin-top: 0px;
-    input {
-      padding: 0 12px;
-    }
-
-    button {
-      padding: 0 12px;
-    }
-  }
-
-  @media (max-width: 320px) {
-    input {
-      padding: 0;
-    }
-
-    button {
-      padding: 0 5px;
-    }
   }
 `;
 
 export const GamesList = styled.div`
-  margin-top: 60px;
+  margin-top: 80px;
   max-width: 715px;
   border-radius: 10px;
 `;

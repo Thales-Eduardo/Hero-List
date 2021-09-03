@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 import { api } from '../../services/api';
 
@@ -18,6 +19,7 @@ interface ApiProps {
     publisher: string;
     fullName: string;
   };
+  favorite: boolean;
 }
 
 export const Home: React.FC = () => {
@@ -63,14 +65,64 @@ export const Home: React.FC = () => {
     setInputError('');
   }
 
-  function profileHero(id: number) {
-    data.find((itens: ApiProps) =>
-      itens.id === id ? history.push(`/profile/${itens.id}`) : false,
-    );
+  useEffect(() => {
+    const res = data.filter((itens: ApiProps) => {
+      const id = localStorage.getItem(`@favoriteHero${itens.id}`);
+      if (itens.id === Number(id)) {
+        return itens.id;
+      }
+      return false;
+    });
+
+    if (!res) {
+      return undefined;
+    }
+
+    res.filter((itens: ApiProps) => {
+      if (itens.favorite === false || itens.favorite === undefined) {
+        itens.favorite = true;
+        const id = itens.id - 1;
+        data.splice(id, 1, itens);
+        setData((props) => [...props]);
+      } else {
+        return false;
+      }
+      return false;
+    });
+  }, [data]);
+
+  function handleFavorite(hero: ApiProps) {
+    data.filter((itens: ApiProps) => {
+      if (itens.id === hero.id && itens.favorite === undefined) {
+        itens.favorite = true;
+        localStorage.setItem(
+          `@favoriteHero${itens.id}`,
+          JSON.stringify(itens.id),
+        );
+        return setData((props) => [...props]);
+      } else if (itens.id === hero.id && itens.favorite === false) {
+        itens.favorite = true;
+        localStorage.setItem(
+          `@favoriteHero${itens.id}`,
+          JSON.stringify(itens.id),
+        );
+        return setData((props) => [...props]);
+      } else if (itens.id === hero.id && itens.favorite === true) {
+        itens.favorite = false;
+        localStorage.removeItem(`@favoriteHero${itens.id}`);
+        return setData((props) => [...props]);
+      } else {
+        return false;
+      }
+    });
   }
 
   return (
     <Container>
+      <Link to="/favorite">
+        Favoritos
+        <AiFillHeart color="red" size={18} />
+      </Link>
       {inputError && <Error>{inputError}</Error>}
       <Form erro={!!inputError} onSubmit={handleFindHero}>
         <input
@@ -84,7 +136,7 @@ export const Home: React.FC = () => {
       <GamesList>
         {data.map((itens) =>
           itens.id <= 10 ? (
-            <Content key={itens.id} onClick={() => profileHero(itens.id)}>
+            <Content key={itens.id} isFavorite={itens.favorite}>
               <img src={itens.images.sm} alt={itens.name} />
 
               <aside>
@@ -97,6 +149,14 @@ export const Home: React.FC = () => {
                   <strong>Editora: </strong> {itens.biography.publisher}.
                 </p>
               </aside>
+
+              <button type="button" onClick={() => handleFavorite(itens)}>
+                {itens.favorite ? (
+                  <AiFillHeart size={26} />
+                ) : (
+                  <AiOutlineHeart size={26} />
+                )}
+              </button>
             </Content>
           ) : (
             false

@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface ContainerProps {
+  isFavorite: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -12,6 +16,22 @@ export const Container = styled.div`
 
   svg {
     margin-bottom: 5px;
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      color: ${(props) => props.theme.colors.button};
+      background: transparent;
+      border: 0;
+      ${(props) =>
+        props.isFavorite &&
+        css`
+          color: red;
+        `}
+    }
   }
 
   @media (max-width: 515px) {

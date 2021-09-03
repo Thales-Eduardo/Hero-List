@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { Link, useParams } from 'react-router-dom';
 
 import { api } from '../../services/api';
@@ -19,6 +20,7 @@ interface ProfileProps {
   biography: {
     fullName: string;
   };
+  favorite: boolean;
 }
 
 interface ParamesProps {
@@ -31,17 +33,56 @@ export const Profile: React.FC = () => {
   const params = useParams<ParamesProps>();
 
   useEffect(() => {
-    api.get(`/id/${params.id}.json`).then((response) => {
+    api.get<ProfileProps>(`/id/${params.id}.json`).then((response) => {
       setHero(response.data);
       setValue(true);
+
+      const id = localStorage.getItem(`@favoriteHero${params.id}`);
+
+      if (params.id === id) {
+        if (
+          response.data.favorite === false ||
+          response.data.favorite === undefined
+        ) {
+          response.data.favorite = true;
+          setHero((props) => ({ ...props }));
+        } else {
+          return false;
+        }
+      }
     });
   }, [params.id]);
 
+  function handleFavorite(heroId: number) {
+    const id = localStorage.getItem(`@favoriteHero${params.id}`);
+
+    if (hero.favorite === false || hero.favorite === undefined) {
+      hero.favorite = true;
+      localStorage.setItem(`@favoriteHero${params.id}`, params.id);
+      return setHero((props) => ({ ...props }));
+    }
+
+    if (heroId === Number(id)) {
+      hero.favorite = false;
+      localStorage.removeItem(`@favoriteHero${params.id}`);
+      return setHero((props) => ({ ...props }));
+    }
+  }
+
   return (
-    <Container>
-      <Link to="/">
-        <FiArrowLeft size={24} />
-      </Link>
+    <Container isFavorite={hero.favorite}>
+      <div>
+        <Link to="/">
+          <FiArrowLeft size={24} />
+        </Link>
+        <button type="button" onClick={() => handleFavorite(hero.id)}>
+          {hero.favorite ? (
+            <AiFillHeart size={26} />
+          ) : (
+            <AiOutlineHeart size={26} />
+          )}
+        </button>
+      </div>
 
       {value ? (
         <Content>
