@@ -14,7 +14,6 @@ export const Container = styled.div`
   a {
     display: flex;
     align-items: center;
-    gap: 4px;
     text-decoration: none;
     color: ${(props) => props.theme.colors.white};
     transition: filter 0.2ms;
@@ -26,6 +25,7 @@ export const Container = styled.div`
 
   @media (max-width: 400px) {
     padding: 10px;
+
     a {
       margin-bottom: 10px;
     }
@@ -123,7 +123,7 @@ export const Content = styled.div<ContentProps>`
     margin-top: 15px;
   }
 
-  img {
+  > img {
     width: 150px;
     height: 200px;
     margin-right: 10px;
@@ -154,23 +154,30 @@ export const Content = styled.div<ContentProps>`
     }
   }
 
-  button {
-    margin-bottom: 160px;
-    color: ${(props) => props.theme.colors.button};
-    background: transparent;
-    border: 0;
-    ${(props) =>
-      props.isFavorite &&
-      css`
-        color: red;
-      `}
+  article {
+    button {
+      align-self: flex-end;
+      color: ${(props) => props.theme.colors.button};
+      background: transparent;
+      border: 0;
+      ${(props) =>
+        props.isFavorite &&
+        css`
+          color: red;
+        `}
+    }
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   @media (max-width: 400px) {
     img {
+      margin-top: -8px;
       width: 230px;
       height: 200px;
-      margin-top: 10px;
 
       object-fit: cover;
       object-position: center;
@@ -189,8 +196,11 @@ export const Content = styled.div<ContentProps>`
       h1 {
       }
     }
-    button {
-      margin-bottom: 0px;
+    article {
+      button {
+        align-self: center;
+        margin-bottom: 10px;
+      }
     }
   }
 `;

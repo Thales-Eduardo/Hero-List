@@ -5,6 +5,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { api } from '../../services/api';
 
 import { Container, Form, GamesList, Content, Error } from './styles';
+import { StarButton } from '../../components/StarButton';
 
 interface ApiProps {
   id: number;
@@ -150,13 +151,19 @@ export const Home: React.FC = () => {
                 </p>
               </aside>
 
-              <button type="button" onClick={() => handleFavorite(itens)}>
-                {itens.favorite ? (
-                  <AiFillHeart size={26} />
-                ) : (
-                  <AiOutlineHeart size={26} />
-                )}
-              </button>
+              <article>
+                <button type="button" onClick={() => handleFavorite(itens)}>
+                  {itens.favorite ? (
+                    <AiFillHeart size={26} />
+                  ) : (
+                    <AiOutlineHeart size={26} />
+                  )}
+                </button>
+
+                <section>
+                  <StarButton />
+                </section>
+              </article>
             </Content>
           ) : (
             false
