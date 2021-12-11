@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { Container } from './styles';
+import starImg from '../../assets/hollywood-star.png';
 
 type StarProps = {
   favorite?: number;
@@ -28,10 +29,7 @@ export const StarButton: React.FC<StarProps> = ({ favorite = 0 }) => {
             onMouseLeave={() => click()}
           >
             <span className="star">
-              <img
-                src="https://cdn-icons.flaticon.com/png/512/5701/premium/5701867.png?token=exp=1639240693~hmac=a4a6e60631021905ef60e6505e29b812"
-                alt="star"
-              />
+              <img src={starImg} alt="star" />
             </span>
           </button>
         );
