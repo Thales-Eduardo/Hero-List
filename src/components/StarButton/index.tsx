@@ -3,16 +3,18 @@ import React, { useState } from 'react';
 import { Container } from './styles';
 import starImg from '../../assets/hollywood-star.png';
 
-type StarProps = {
+interface StarProps {
+  id: number;
   favorite?: number;
-};
+}
 
-export const StarButton: React.FC<StarProps> = ({ favorite = 0 }) => {
-  const [rating, setRating] = useState(favorite);
+export const StarButton: React.FC<StarProps> = ({ id, favorite, ...rest }) => {
+  const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
 
-  function click() {
-    setHover(rating);
+  function click(index: any) {
+    setRating(index);
+    // console.log(id, hover);
   }
 
   return (
@@ -24,9 +26,9 @@ export const StarButton: React.FC<StarProps> = ({ favorite = 0 }) => {
             type="button"
             key={index}
             className={index <= (hover || rating) ? 'on' : 'off'}
-            onClick={() => setRating(index)}
+            onClick={() => click(index)}
             onMouseEnter={() => setHover(index)}
-            onMouseLeave={() => click()}
+            onMouseLeave={() => setHover(rating)}
           >
             <span className="star">
               <img src={starImg} alt="star" />

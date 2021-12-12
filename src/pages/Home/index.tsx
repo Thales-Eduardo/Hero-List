@@ -161,7 +161,7 @@ export const Home: React.FC = () => {
                 </button>
 
                 <section>
-                  <StarButton />
+                  <StarButton id={itens.id} />
                 </section>
               </article>
             </Content>
